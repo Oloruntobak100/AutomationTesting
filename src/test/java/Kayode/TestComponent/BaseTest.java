@@ -70,7 +70,6 @@ public class BaseTest {
            List<HashMap<String, String>> data = objectMapper.readValue(jsonContent, new TypeReference<List<HashMap<String, String>>>() {
            });
            return data;
-
    }
 
        public String getScreenshot(String testCaseName, WebDriver driver) throws IOException {
@@ -93,6 +92,6 @@ public class BaseTest {
     public void tearDown(){
         driver.quit();
     }
-    
+
 
 }

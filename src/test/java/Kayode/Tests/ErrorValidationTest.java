@@ -1,16 +1,10 @@
 package Kayode.Tests;
 import Kayode.PageObjects.*;
-
 import Kayode.TestComponent.BaseTest;
-
-import Kayode.TestComponent.RetryFailedTests;
 import org.openqa.selenium.WebElement;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
 import java.io.IOException;
-
 import java.util.List;
 
 public class ErrorValidationTest extends BaseTest {
