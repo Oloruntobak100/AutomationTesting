@@ -92,6 +92,7 @@ public class BaseTest {
     public void tearDown(){
         driver.quit();
     }
+    // This is to test CI/CD automation
 
 
 }
