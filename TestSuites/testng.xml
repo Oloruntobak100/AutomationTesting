@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite parallel="tests" name="All Test Suite">
+
+    <listeners>
+        <listener class-name="Kayode.TestComponent.Listeners" />
+    </listeners>
+
+    <test thread-count="5" name="Submit Order Test">
+        <classes>
+            <class name="Kayode.Tests.SubmitOrderTest" />
+        </classes>
+    </test>
+
+    <test thread-count="5" name="Error Validation Test">
+        <classes>
+            <class name="Kayode.Tests.ErrorValidationTest" />
+        </classes>
+    </test>
+</suite>
