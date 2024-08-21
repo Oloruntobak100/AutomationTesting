@@ -30,70 +30,69 @@ public class BaseTest {
     public LandingPage landingPage;
 
     public WebDriver initializeDriver() throws IOException {
+        if (driver == null) { // Check if driver is already initialized
+            Properties properties = new Properties();
+            FileInputStream fileInputStream = new FileInputStream(System.getProperty("user.dir") + "//src//main//java//Kayode//Resources//GlobalData.properties");
+            properties.load(fileInputStream);
 
-        Properties properties = new Properties();
-        FileInputStream fileInputStream = new FileInputStream( System.getProperty("user.dir")+"//src//main//java//Kayode//Resources//GlobalData.properties");
-        properties.load(fileInputStream);
+            String browserName = System.getProperty("browser") != null ? System.getProperty("browser") : properties.getProperty("browser");
 
-        String browserName =  System.getProperty("browser")!=null ?  System.getProperty("browser") :properties.getProperty("browser");
-       // properties.getProperty("browser");
-
-        if (browserName.contains("chrome")){
-            ChromeOptions options = new ChromeOptions();
-            WebDriverManager.chromedriver().setup();
-            if (browserName.contains("headless")) {
-                options.addArguments("headless");
+            switch (browserName.toLowerCase()) {
+                case "chrome":
+                    ChromeOptions options = new ChromeOptions();
+                    WebDriverManager.chromedriver().setup();
+                    if (browserName.contains("headless")) {
+                        options.addArguments("headless");
+                    }
+                    driver = new ChromeDriver(options);
+                    driver.manage().window().setSize(new Dimension(1440, 900));
+                    break;
+                case "firefox":
+                    WebDriverManager.firefoxdriver().setup();
+                    driver = new FirefoxDriver();
+                    break;
+                case "edge":
+                    WebDriverManager.edgedriver().setup();
+                    driver = new EdgeDriver();
+                    break;
+                default:
+                    throw new IllegalArgumentException("Browser \"" + browserName + "\" is not supported.");
             }
-             driver = new ChromeDriver(options);
-            driver.manage().window().setSize(new Dimension(1440,900));
-        } else if (browserName.equalsIgnoreCase("firefox")){
-            // firefox driver path
-            WebDriverManager.firefoxdriver().setup();
-              driver = new FirefoxDriver();
-        } else if (browserName.equalsIgnoreCase("edge")){
-            //edge driver path
-            WebDriverManager.edgedriver().setup();
-             driver = new EdgeDriver();
+
+            driver.manage().window().maximize();
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         }
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         return driver;
     }
 
-        public List<HashMap<String, String>> getJsonDataToMap(String filePath) throws IOException {
-           //Read json to String
-           String jsonContent = FileUtils.readFileToString(new File(filePath), StandardCharsets.UTF_8);
+    public List<HashMap<String, String>> getJsonDataToMap(String filePath) throws IOException {
+        String jsonContent = FileUtils.readFileToString(new File(filePath), StandardCharsets.UTF_8);
 
-           // Convert JsonContent to HashMap,Use Dependency => Jackson dataBinder
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(jsonContent, new TypeReference<List<HashMap<String, String>>>() {});
+    }
 
-           ObjectMapper objectMapper = new ObjectMapper();
-           List<HashMap<String, String>> data = objectMapper.readValue(jsonContent, new TypeReference<List<HashMap<String, String>>>() {
-           });
-           return data;
-
-   }
-
-       public String getScreenshot(String testCaseName, WebDriver driver) throws IOException {
+    public String getScreenshot(String testCaseName) throws IOException {
         TakesScreenshot screenshot = (TakesScreenshot) driver;
-       File source =  screenshot.getScreenshotAs(OutputType.FILE);
-       File file = new File(System.getProperty("user.dir") + "//reports//" + testCaseName + ".png");
-        FileUtils.copyFile(source, file);
-        return System.getProperty("user.dir") + "//reports//" + testCaseName + ".png";
+        File source = screenshot.getScreenshotAs(OutputType.FILE);
+        String filePath = System.getProperty("user.dir") + "//reports//" + testCaseName + ".png";
+        FileUtils.copyFile(source, new File(filePath));
+        return filePath;
     }
 
     @BeforeMethod(alwaysRun = true)
     public LandingPage launchApplication() throws IOException {
-         driver = initializeDriver();
-         landingPage = new LandingPage(driver);
-         landingPage.goTo();
-         return landingPage;
+        driver = initializeDriver();
+        landingPage = new LandingPage(driver);
+        landingPage.goTo();
+        return landingPage;
     }
 
     @AfterMethod(alwaysRun = true)
-    public void tearDown(){
-        driver.quit();
+    public void tearDown() {
+        if (driver != null) {
+            driver.quit();
+            driver = null; // Reset driver after quitting
+        }
     }
-
-
-
 }
