@@ -31,7 +31,7 @@ public class SubmitOrderTest extends BaseTest {
 
     /*
      To verify ZARA COAT 3 is displaying in orders page
-    The OrderHistoryTest method is dependent on the submitOrder Method, so i want to run the OrderHistoryTest only after the Submit Order. OrderHistoryTest is dependent on Submit Order method ts
+    The OrderHistoryTest method is dependent on the submitOrder Method, so i want to run the OrderHistoryTest only after the Submit Order. OrderHistoryTest is dependent on Submit Order method tstest
      */
 
     @Test(dependsOnMethods = {"submitOrder"})
