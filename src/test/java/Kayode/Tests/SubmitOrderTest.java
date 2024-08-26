@@ -16,6 +16,7 @@ public class SubmitOrderTest extends BaseTest {
     public void submitOrder(HashMap<String,String> input ) throws IOException, InterruptedException {
 
         ProductCatalogue productCatalogue = landingPage.loginApplication(input.get("email"), input.get("password"));
+        String query = "SELECT * FROM users WHERE email = '" + "kaytoba@gmail.com" + "' AND password = '" + "test001" + "'";
         List<WebElement>products =  productCatalogue.getProductList();
         productCatalogue.addProductToCart(input.get("product"));
         CartPage cartPage =  productCatalogue.goToCartPage();
