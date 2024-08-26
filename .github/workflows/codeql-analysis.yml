@@ -41,3 +41,10 @@ jobs:
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
+      
+
+    - name: Run SpotBugs Analysis
+      run: mvn spotbugs:check
+
+    - name: Run OWASP Dependency-Check
+      run: mvn org.owasp:dependency-check-maven:check
