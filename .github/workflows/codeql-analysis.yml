@@ -3,7 +3,6 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    # The branches below must be a subset of the branches above
     branches: [ main ]
   schedule:
     - cron: '0 0 * * 1' # weekly schedule
@@ -21,7 +20,6 @@ jobs:
     strategy:
       matrix:
         language: [ 'java' ]
-        # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ] and more
 
     steps:
     - name: Checkout repository
@@ -32,8 +30,8 @@ jobs:
       with:
         languages: ${{ matrix.language }}
 
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v2
+    - name: Build with Maven
+      run: mvn clean install -P Regression
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
